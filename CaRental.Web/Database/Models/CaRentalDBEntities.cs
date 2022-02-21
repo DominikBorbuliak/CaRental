@@ -2,7 +2,7 @@
 
 namespace CaRental.Web.Database.Models
 {
-    public class DatabaseContext : DbContext
+    public class CaRentalDBEntities : DbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Car> Cars { get; set; }

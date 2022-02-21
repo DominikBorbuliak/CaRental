@@ -1,4 +1,6 @@
-﻿using CaRental.Web.Models;
+﻿using CaRental.Web.Database.Data;
+using CaRental.Web.Extensions;
+using CaRental.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

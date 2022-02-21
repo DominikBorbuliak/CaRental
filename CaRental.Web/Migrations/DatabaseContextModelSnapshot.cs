@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CaRental.Web.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(CaRentalDBEntities))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

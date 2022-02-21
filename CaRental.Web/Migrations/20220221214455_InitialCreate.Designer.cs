@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CaRental.Web.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(CaRentalDBEntities))]
     [Migration("20220221214455_InitialCreate")]
     partial class InitialCreate
     {
