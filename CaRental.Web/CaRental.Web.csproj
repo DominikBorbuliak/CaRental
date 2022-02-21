@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Database\Services\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

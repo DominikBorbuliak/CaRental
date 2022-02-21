@@ -24,5 +24,9 @@ namespace CaRental.Web.Database.Data
                 return user;
             }
         }
+        public void AddUser(User user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
