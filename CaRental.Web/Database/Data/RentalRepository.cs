@@ -23,6 +23,7 @@ namespace CaRental.Web.Database.Data
                     throw new UserException($"Can not rent this car because it is already rented from: '{activeRentForCar.From}' to: '{activeRentForCar.To}'!");
 
                 database.Add(rental);
+                database.SaveChanges();
             }
         }
     }

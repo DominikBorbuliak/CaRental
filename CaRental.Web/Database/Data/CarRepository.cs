@@ -19,6 +19,7 @@ namespace CaRental.Web.Database.Data
                     throw new UserException($"Car with VIN: '{car.VIN}' already exists!");
 
                 database.Cars.Add(car);
+                database.SaveChanges();
             }
         }
 
@@ -38,6 +39,7 @@ namespace CaRental.Web.Database.Data
                     throw new KeyNotFoundException($"Car with VIN: '{VIN}' not fount!");
 
                 database.Cars.Remove(carToDelete);
+                database.SaveChanges();
             }
         }
 
@@ -48,7 +50,10 @@ namespace CaRental.Web.Database.Data
         public void DeleteCar(Car car)
         {
             using (var database = new CaRentalDBEntities())
+            {
                 database.Cars.Remove(car);
+                database.SaveChanges();
+            } 
         }
 
         /// <summary>
@@ -97,6 +102,7 @@ namespace CaRental.Web.Database.Data
                     throw new KeyNotFoundException($"Car with VIN: '{car.VIN}' not found!");
 
                 database.Cars.Update(car);
+                database.SaveChanges();
             }
         }
     }

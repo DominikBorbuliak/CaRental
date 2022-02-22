@@ -40,8 +40,9 @@ namespace CaRental.Web.Database.Data
                     throw new UserException($"User with email: '{user.Email}' already exists!");
 
                 user.Password = user.Password.ConvertToSha256Hash();
-
+                
                 database.Users.Add(user);
+                database.SaveChanges();
             }
         }
     }
