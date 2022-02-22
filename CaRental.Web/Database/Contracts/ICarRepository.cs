@@ -8,6 +8,7 @@ namespace CaRental.Web.Database.Contracts
         IEnumerable<Car> GetAvailableCars();
         void AddCar(Car car);
         void DeleteCarByVIN(string VIN);
+        void DeleteCar(Car car);
         void UpdateCar(Car car);
     }
 }
