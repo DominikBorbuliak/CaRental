@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification;
 using CaRental.Web.Database.Contracts;
 using CaRental.Web.Database.Data;
 using CaRental.Web.Database.Services;
@@ -16,6 +17,13 @@ var carRepository = new CarRepository();
 var rentalRepository = new RentalRepository();
 var databaseService = new DatabaseService(userRepository, carRepository, rentalRepository);
 builder.Services.AddSingleton<IDatabaseService>(databaseService);
+
+// Configure notificatio nservice
+builder.Services.AddNotyf(config => {
+    config.DurationInSeconds = 3;
+    config.IsDismissable = true;
+    config.Position = NotyfPosition.TopRight;
+});
 
 var app = builder.Build();
 
@@ -36,6 +44,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Register}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();

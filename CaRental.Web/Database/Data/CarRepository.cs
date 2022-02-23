@@ -16,7 +16,7 @@ namespace CaRental.Web.Database.Data
             using (var database = new CaRentalDBEntities())
             {
                 if (database.Cars.Any(carDB => carDB.VIN.Equals(car.VIN)))
-                    throw new UserException($"Car with VIN: '{car.VIN}' already exists!");
+                    throw new UserException($"Car with VIN ({car.VIN}) already exists!");
 
                 database.Cars.Add(car);
                 database.SaveChanges();
@@ -36,7 +36,7 @@ namespace CaRental.Web.Database.Data
                 var carToDelete = database.Cars.FirstOrDefault(carDB => carDB.VIN.Equals(VIN));
 
                 if (carToDelete == null)
-                    throw new KeyNotFoundException($"Car with VIN: '{VIN}' not fount!");
+                    throw new KeyNotFoundException($"Car with VIN ({VIN}) not fount!");
 
                 database.Cars.Remove(carToDelete);
                 database.SaveChanges();
@@ -99,7 +99,7 @@ namespace CaRental.Web.Database.Data
             using (var database = new CaRentalDBEntities())
             {
                 if (!database.Cars.Any(carDB => carDB.VIN.Equals(car.VIN)))
-                    throw new KeyNotFoundException($"Car with VIN: '{car.VIN}' not found!");
+                    throw new KeyNotFoundException($"Car with VIN ({car.VIN}) not found!");
 
                 database.Cars.Update(car);
                 database.SaveChanges();

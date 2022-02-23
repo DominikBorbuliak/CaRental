@@ -20,7 +20,7 @@ namespace CaRental.Web.Database.Data
                                                                         (rentalDB.From < rental.To && rentalDB.From > rental.From)));
                 
                 if (activeRentForCar != null)
-                    throw new UserException($"Can not rent this car because it is already rented from: '{activeRentForCar.From}' to: '{activeRentForCar.To}'!");
+                    throw new UserException($"Can not rent this car because it is already rented from ({activeRentForCar.From}) to: ({activeRentForCar.To})!");
 
                 database.Add(rental);
                 database.SaveChanges();

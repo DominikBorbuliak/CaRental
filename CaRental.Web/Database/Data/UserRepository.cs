@@ -20,7 +20,7 @@ namespace CaRental.Web.Database.Data
                 var user = database.Users.FirstOrDefault(user => user.Email.Equals(userEmail));
 
                 if (user == null)
-                    throw new UserException($"User with email: '{userEmail}' not found!");
+                    throw new UserException($"User with email ({userEmail}) not found!");
 
                 return user;
             }
@@ -37,7 +37,7 @@ namespace CaRental.Web.Database.Data
             using (var database = new CaRentalDBEntities())
             {
                 if (database.Users.Any(userDB => userDB.Email.Equals(user.Email)))
-                    throw new UserException($"User with email: '{user.Email}' already exists!");
+                    throw new UserException($"User with email ({user.Email}) already exists!");
 
                 user.Password = user.Password.ConvertToSha256Hash();
                 
