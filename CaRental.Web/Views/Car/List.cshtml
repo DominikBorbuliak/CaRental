@@ -1,0 +1,78 @@
+﻿@using CaRental.Web.Database.Models
+@model CarListViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    .container {
+        margin: 1% 0;
+        max-width: 100%;
+    }
+
+    .card {
+        border-radius: 5px;
+    }
+
+    .card-header {
+        font-weight: bold;
+    }
+</style>
+
+@Html.Partial("_addCar", new Car());
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Table
+                </div>
+                <div class=card-body>
+                    <table class="table table-striped">
+                        <thead class="">
+                            <tr>
+                                <th scope="col">Image</th>
+                                <th scope="col">Manufacturer</th>
+                                <th scope="col">Model</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Fuel Type</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Year of manufacture</th>
+                                <th scope="col">Rental price</th>
+                                <th scope="col">
+                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        Add car
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        @{
+                            if (Model?.Cars != null && Model.Cars.Any())
+                            {
+                                <tbody>
+                                    @foreach (var car in Model.Cars)
+                                    {
+                                        Html.RenderPartial("_Car", car);
+                                    }
+                                </tbody>
+                            }
+                            else
+                            {
+                                <tfoot>
+									<tr style="position: relative">
+										<th style="border: 0">
+											<div style="position: absolute; width: 100%; left: 0; right: 0; text-align: center">
+												No available cars
+											</div>
+										</th>
+									</tr>
+								</tfoot>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

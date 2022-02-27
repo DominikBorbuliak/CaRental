@@ -1,0 +1,26 @@
+﻿@model CaRental.Web.Database.Models.Car;
+
+@{
+    Layout = null;
+}
+
+<tr>
+    <td>
+        <img src="@Model.ImageUrl" width="100px" height="50px"/>
+    </td>
+    <td>@Model.Manufacturer</td>
+    <td>@Model.Model</td>
+    <td>@Model.Type.ToString()</td>
+    <td>@Model.FuelType.ToString()</td>
+    <td>@Model.Description</td>
+    <td>@Model.YearOfManufacture</td>
+    <td>@Model.RentalPrice</td>
+    <td>
+        <button type="button" class="btn btn-outline-danger">
+            Remove
+        </button>
+        <button type="button" class="btn btn-outline-warning">
+            Update
+        </button>
+    </td>
+</tr>

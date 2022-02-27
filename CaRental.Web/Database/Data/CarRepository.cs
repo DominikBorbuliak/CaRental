@@ -62,8 +62,10 @@ namespace CaRental.Web.Database.Data
         /// <returns></returns>
         public IEnumerable<Car> GetAllCars()
         {
+            var cars = new List<Car>();
             using (var database = new CaRentalDBEntities())
-                return database.Cars;
+                cars.AddRange(database.Cars);
+            return cars;
         }
 
         /// <summary>

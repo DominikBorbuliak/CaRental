@@ -3,7 +3,6 @@ using CaRental.Web.Database.Contracts;
 using CaRental.Web.Database.Models;
 using CaRental.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
 
 namespace CaRental.Web.Controllers
 {
@@ -57,12 +56,9 @@ namespace CaRental.Web.Controllers
                 return View("Index");
             }
 
-            // Fill informations about user
-            ViewData["UserEmail"] = user.Email;
-            ViewData["IsAdmin"] = user.IsAdmin;
-
             // Redirect to main page after successfull person
-            return RedirectToAction("Index", "Home");
+            // TODO: fix sending informations
+            return RedirectToAction("List", "Car", new { UserEmail = user.Email, IsAdmin = user.IsAdmin });
         }
     }
 }
