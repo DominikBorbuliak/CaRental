@@ -3,6 +3,7 @@ using CaRental.Web.Database.Contracts;
 using CaRental.Web.Database.Models;
 using CaRental.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace CaRental.Web.Controllers
@@ -31,6 +32,11 @@ namespace CaRental.Web.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public IActionResult OnAddCarSubmit(Car car)
+        {
+            return RedirectToAction("List");
         }
 
         public IActionResult Logout()

@@ -12,6 +12,9 @@ namespace CaRental.Web.Database.Models
         /// </summary>
         [Key]
         [Column(TypeName = "VARCHAR (17)")]
+        [DataType(DataType.Text)]
+        [MinLength(17)]
+        [MaxLength(17)]
         public string VIN { get; set; }
 
         /// <summary>
@@ -19,6 +22,8 @@ namespace CaRental.Web.Database.Models
         /// e.g. BMW, Ford, Wolkswagen 
         /// </summary>
         [Column(TypeName = "VARCHAR (20)")]
+        [DataType(DataType.Text)]
+        [MaxLength(17)]
         public string Manufacturer { get; set; }
 
         /// <summary>
@@ -26,6 +31,8 @@ namespace CaRental.Web.Database.Models
         /// e.g. (AUDI) A6, (Citroen) C3, (Hyundai) I30
         /// </summary>
         [Column(TypeName = "VARCHAR (20)")]
+        [DataType(DataType.Text)]
+        [MaxLength(20)]
         public string Model { get; set; }
 
         /// <summary>
@@ -33,37 +40,45 @@ namespace CaRental.Web.Database.Models
         /// e.g. Hatchback, Fastback, Combi
         /// </summary>
         [Column(TypeName = "INT (2)")]
-        public CarType Type { get; set; }
+        [EnumDataType(typeof(CarType))]
+        public CarType Type { get; set; } = CarType.Unknown;
 
         /// <summary>
         /// Fuel type
         /// e.g. Gasoline, Diesel, LPG
         /// </summary>
         [Column(TypeName = "INT (2)")]
-        public FuelType FuelType { get; set; }
+        [EnumDataType(typeof(FuelType))]
+        public FuelType FuelType { get; set; } = FuelType.Gasoline;
 
         /// <summary>
         /// Description of the car
         /// e.g. Motor: 1.4I, 5 seats
         /// </summary>
+        [DataType(DataType.MultilineText)]
         public string? Description { get; set; }
 
         /// <summary>
         /// Year of manufacture of the car
         /// </summary>
         [Column(TypeName = "INT (4)")]
+        [Range(2000, 2022)]
         public int YearOfManufacture { get; set; }
 
         /// <summary>
         /// Rental price per hour
         /// </summary>
         [Column(TypeName = "DOUBLE(4, 2)")]
+        [Range(0, 9999.99)]
+        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Rental price should have only 2 decimal places.")]
         public double RentalPrice { get; set; }
 
         /// <summary>
         /// Url to car image
         /// </summary>
         [Column(TypeName = "VARCHAR (255)")]
+        [DataType(DataType.ImageUrl)]
+        [MaxLength(255)]
         public string ImageUrl { get; set; }
     }
 
