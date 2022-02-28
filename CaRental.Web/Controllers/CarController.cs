@@ -36,6 +36,19 @@ namespace CaRental.Web.Controllers
 
         public IActionResult OnAddCarSubmit(Car car)
         {
+            try
+            {
+                _databaseService.AddCar(car);
+            }
+            catch (UserException exception)
+            {
+                _notificationService.Error(exception.Message);
+            }
+            catch
+            {
+                _notificationService.Error("Unexpected error occured! Please contact administrator.");
+            }
+
             return RedirectToAction("List");
         }
 

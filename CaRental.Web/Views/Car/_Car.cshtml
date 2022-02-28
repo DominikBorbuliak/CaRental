@@ -14,7 +14,7 @@
     <td>@Model.FuelType.ToString()</td>
     <td>@Model.Description</td>
     <td>@Model.YearOfManufacture</td>
-    <td>@Model.RentalPrice</td>
+    <td>@($"{Model.RentalPrice.ToString("0.00")} €")</td>
     <td>
         <button type="button" class="btn btn-outline-danger">
             Remove

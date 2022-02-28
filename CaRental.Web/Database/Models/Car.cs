@@ -70,7 +70,6 @@ namespace CaRental.Web.Database.Models
         /// </summary>
         [Column(TypeName = "DOUBLE(4, 2)")]
         [Range(0, 9999.99)]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Rental price should have only 2 decimal places.")]
         public double RentalPrice { get; set; }
 
         /// <summary>
