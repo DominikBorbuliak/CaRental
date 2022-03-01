@@ -20,7 +20,9 @@
     }
 </style>
 
-@Html.Partial("_addCar", new Car())
+@await Html.PartialAsync("_addCar", new Car())
+@await Html.PartialAsync("_updateCar", new Car())
+
 <div>
     <div class="row">
         <div class="col-md-12">
@@ -41,7 +43,7 @@
                                 <th scope="col">Year of manufacture</th>
                                 <th scope="col">Rental price</th>
                                 <th scope="col">
-                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCarModal">
                                         Add car
                                     </button>
                                 </th>
@@ -53,7 +55,7 @@
                                 <tbody>
                                     @foreach (var car in Model.Cars)
                                     {
-                                        Html.RenderPartial("_Car", car);
+                                        await Html.RenderPartialAsync("_Car", car);
                                     }
                                 </tbody>
                             }
@@ -76,3 +78,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

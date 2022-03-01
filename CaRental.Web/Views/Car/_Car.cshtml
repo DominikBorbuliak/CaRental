@@ -1,8 +1,6 @@
-﻿@model CaRental.Web.Database.Models.Car;
-
-@{
-    Layout = null;
-}
+﻿@using System.Text.Json;
+@using System.Text.Json.Serialization;
+@model CaRental.Web.Database.Models.Car;
 
 <tr>
     <td>
@@ -16,11 +14,25 @@
     <td>@Model.YearOfManufacture</td>
     <td>@($"{Model.RentalPrice.ToString("0.00")} €")</td>
     <td>
-        <button type="button" class="btn btn-outline-danger">
+        <button type="button" class="btn btn-outline-danger" onclick="window.location.href='@Url.Action("OnDeleteCarClick", "Car", @Model)'">
             Remove
         </button>
-        <button type="button" class="btn btn-outline-warning">
+        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCarModal" onclick="setDataInModal(@JsonSerializer.Serialize(Model))">
             Update
         </button>
     </td>
 </tr>
+
+<script>
+    function setDataInModal(car) {
+        $("#updateCarModal .modal-body #inputVIN").val(car.VIN);
+        $("#updateCarModal .modal-body #inputManufacturer").val(car.Manufacturer);
+        $("#updateCarModal .modal-body #inputModel").val(car.Model);
+        $("#updateCarModal .modal-body #inputType").val(car.Type);
+        $("#updateCarModal .modal-body #inputFuelType").val(car.FuelType);
+        $("#updateCarModal .modal-body #inputDescription").val(car.Description);
+        $("#updateCarModal .modal-body #inputYearOfManufacture").val(car.YearOfManufacture);
+        $("#updateCarModal .modal-body #inputRentalPrice").val(car.RentalPrice);
+        $("#updateCarModal .modal-body #inputImageUrl").val(car.ImageUrl);
+    }
+</script>

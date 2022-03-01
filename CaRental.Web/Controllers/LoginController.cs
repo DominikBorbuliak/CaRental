@@ -38,7 +38,11 @@ namespace CaRental.Web.Controllers
 
                 // Check if passwords match
                 if (user.Password.ConvertToSha256Hash().Equals(userDB.Password))
+                {
+                    HttpContext.Session.SetString("UserEmail", user.Email);
+                    HttpContext.Session.SetString("IsAdmin", user.IsAdmin.ToString());
                     _notificationService.Success("You have been logged in successfully!");
+                }
                 else
                 {
                     _notificationService.Error("Incorrect password! Please try again.");
@@ -58,7 +62,7 @@ namespace CaRental.Web.Controllers
 
             // Redirect to main page after successfull person
             // TODO: fix sending informations
-            return RedirectToAction("List", "Car", new { UserEmail = user.Email, IsAdmin = user.IsAdmin });
+            return RedirectToAction("List", "Car");
         }
     }
 }

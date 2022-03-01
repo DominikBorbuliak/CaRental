@@ -2,8 +2,23 @@ using AspNetCoreHero.ToastNotification;
 using CaRental.Web.Database.Contracts;
 using CaRental.Web.Database.Data;
 using CaRental.Web.Database.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Setup session so we can store data there
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// Setup culture info
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
 // Add razor runtime compilation
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -41,6 +56,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

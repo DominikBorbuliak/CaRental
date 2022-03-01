@@ -69,7 +69,7 @@ namespace CaRental.Web.Database.Models
         /// Rental price per hour
         /// </summary>
         [Column(TypeName = "DOUBLE(4, 2)")]
-        [Range(0, 9999.99)]
+        [Range(0.01, 999.99)]
         public double RentalPrice { get; set; }
 
         /// <summary>

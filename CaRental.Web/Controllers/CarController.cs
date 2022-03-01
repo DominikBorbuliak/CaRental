@@ -3,8 +3,6 @@ using CaRental.Web.Database.Contracts;
 using CaRental.Web.Database.Models;
 using CaRental.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Diagnostics;
 
 namespace CaRental.Web.Controllers
 {
@@ -19,11 +17,9 @@ namespace CaRental.Web.Controllers
             _notificationService = notificationService;
         }
 
-        public IActionResult List(string userEmail, string isAdmin)
+        public IActionResult List()
         {
-            // Setup variables
-            ViewData["UserEmail"] = userEmail;
-            ViewData["IsAdmin"] = isAdmin;
+            var isAdmin = bool.Parse(HttpContext.Session.GetString("IsAdmin") ?? "false");
 
             var cars = _databaseService.GetAllCars();
             var viewModel = new CarListViewModel
@@ -39,6 +35,45 @@ namespace CaRental.Web.Controllers
             try
             {
                 _databaseService.AddCar(car);
+                _notificationService.Success("Car was succesfully created.");
+            }
+            catch (UserException exception)
+            {
+                _notificationService.Error(exception.Message);
+            }
+            catch
+            {
+                _notificationService.Error("Unexpected error occured! Please contact administrator.");
+            }
+
+            return RedirectToAction("List");
+        }
+
+        public IActionResult OnUpdateCarSubmit(Car car)
+        {
+            try
+            {
+                _databaseService.UpdateCar(car);
+                _notificationService.Success("Car was succesfully updated.");
+            }
+            catch (UserException exception)
+            {
+                _notificationService.Error(exception.Message);
+            }
+            catch
+            {
+                _notificationService.Error("Unexpected error occured! Please contact administrator.");
+            }
+
+            return RedirectToAction("List");
+        }
+
+        public IActionResult OnDeleteCarClick(Car car)
+        {
+            try
+            {
+                _databaseService.DeleteCar(car);
+                _notificationService.Success("Car was succesfully deleted.");
             }
             catch (UserException exception)
             {
@@ -54,14 +89,8 @@ namespace CaRental.Web.Controllers
 
         public IActionResult Logout()
         {
-            ViewData.Clear();
+            HttpContext.Session.Clear();
             return RedirectToAction("Login", "Index");
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
