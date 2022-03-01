@@ -1,8 +1,12 @@
 ﻿@using CaRental.Web.Database.Models
+@using Microsoft.AspNetCore.Http
+
 @model CarListViewModel
+@inject IHttpContextAccessor httpContextAccessor   
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Car list";
+    ViewData["IsAdmin"] = @httpContextAccessor?.HttpContext?.Session.GetString("IsAdmin");
 }
 
 <style>
@@ -15,7 +19,7 @@
         border-radius: 5px;
     }
 
-    .card-header {
+    .card-header, .control-label {
         font-weight: bold;
     }
 </style>
@@ -24,11 +28,52 @@
 @await Html.PartialAsync("_updateCar", new Car())
 
 <div>
+    <div class="row" style="margin-bottom: 20px;">
+        <div class="col-md-12">
+            <div class=card>
+                <div class="card-header">
+                    Filters
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="control-label">Manufacturer:</label>
+                            <select class="form-select" asp-items="@Model.Cars.DistinctBy(car => car.Manufacturer).Select(car => new SelectListItem {Text = car.Manufacturer})"></select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Type:</label>
+                            <select class="form-select" asp-items="@Model.Cars.DistinctBy(car => car.Type).Select(car => new SelectListItem {Text = car.Type.ToString()})"></select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Fuel type:</label>
+                            <select class="form-select" asp-items="@Model.Cars.DistinctBy(car => car.FuelType).Select(car => new SelectListItem {Text = car.FuelType.ToString()})"></select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Year from:</label>
+                            <input class="form-control" type="number" min="2000" max="2022" step="1" value="2000"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="control-label">Year to:</label>
+                            <input class="form-control" type="number" min="2000" max="2022" step="1" value="2022"/>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label">Price from:</label>
+                            <input class="form-control" type="number" step="0.25" min="0" value="0"/>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label">Price to:</label>
+                            <input class="form-control" type="number" min="0" step="0.25" value="@(Model.Cars.Max(car => car.RentalPrice))"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Table
+                    @(bool.Parse(ViewData["IsAdmin"]?.ToString() ?? "false") ? "All cars" : "Available cars")
                 </div>
                 <div class=card-body>
                     <table class="table table-striped">
@@ -42,11 +87,20 @@
                                 <th scope="col">Description</th>
                                 <th scope="col">Year of manufacture</th>
                                 <th scope="col">Rental price</th>
-                                <th scope="col">
-                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCarModal">
-                                        Add car
-                                    </button>
-                                </th>
+                                @{
+                                    if (bool.Parse(ViewData["IsAdmin"]?.ToString() ?? "false"))
+                                    {
+                                        <th scope="col">
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCarModal">
+                                                Add car
+                                            </button>
+                                        </th>
+                                    }
+                                    else
+                                    {
+                                        <th scope="col"></th>
+                                    }
+                                }
                             </tr>
                         </thead>
                         @{

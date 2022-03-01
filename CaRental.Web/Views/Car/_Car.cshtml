@@ -1,6 +1,13 @@
 ﻿@using System.Text.Json;
 @using System.Text.Json.Serialization;
+@using Microsoft.AspNetCore.Http
+
 @model CaRental.Web.Database.Models.Car;
+@inject IHttpContextAccessor httpContextAccessor
+
+@{
+    ViewData["IsAdmin"] = @httpContextAccessor?.HttpContext?.Session.GetString("IsAdmin");
+}
 
 <tr>
     <td>
@@ -13,14 +20,27 @@
     <td>@Model.Description</td>
     <td>@Model.YearOfManufacture</td>
     <td>@($"{Model.RentalPrice.ToString("0.00")} €")</td>
-    <td>
-        <button type="button" class="btn btn-outline-danger" onclick="window.location.href='@Url.Action("OnDeleteCarClick", "Car", @Model)'">
-            Remove
-        </button>
-        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCarModal" onclick="setDataInModal(@JsonSerializer.Serialize(Model))">
-            Update
-        </button>
-    </td>
+    @{
+        if (bool.Parse(ViewData["IsAdmin"]?.ToString() ?? "false"))
+        {
+            <td>
+                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='@Url.Action("OnDeleteCarClick", "Car", @Model)'">
+                    Remove
+                </button>
+                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCarModal" onclick="setDataInModal(@JsonSerializer.Serialize(Model))">
+                    Update
+                </button>
+            </td>
+        }
+        else
+        {
+            <td>
+                <button type="button" class="btn btn-outline-primary">
+                    Rent
+                </button>
+            </td>
+        }
+    }
 </tr>
 
 <script>

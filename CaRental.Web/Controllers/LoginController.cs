@@ -39,8 +39,8 @@ namespace CaRental.Web.Controllers
                 // Check if passwords match
                 if (user.Password.ConvertToSha256Hash().Equals(userDB.Password))
                 {
-                    HttpContext.Session.SetString("UserEmail", user.Email);
-                    HttpContext.Session.SetString("IsAdmin", user.IsAdmin.ToString());
+                    HttpContext.Session.SetString("UserEmail", userDB.Email);
+                    HttpContext.Session.SetString("IsAdmin", userDB.IsAdmin.ToString());
                     _notificationService.Success("You have been logged in successfully!");
                 }
                 else
