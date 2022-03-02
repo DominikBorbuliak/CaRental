@@ -7,6 +7,7 @@
 
 @{
     ViewData["IsAdmin"] = @httpContextAccessor?.HttpContext?.Session.GetString("IsAdmin");
+    ViewData["UserEmail"] = @httpContextAccessor?.HttpContext?.Session.GetString("UserEmail");
 }
 
 <tr>
@@ -27,7 +28,7 @@
                 <button type="button" class="btn btn-outline-danger" onclick="window.location.href='@Url.Action("OnDeleteCarClick", "Car", @Model)'">
                     Remove
                 </button>
-                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCarModal" onclick="setDataInModal(@JsonSerializer.Serialize(Model))">
+                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCarModal" onclick="setDataInUpdateCarModal(@JsonSerializer.Serialize(Model))">
                     Update
                 </button>
             </td>
@@ -35,7 +36,7 @@
         else
         {
             <td>
-                <button type="button" class="btn btn-outline-primary">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#rentCarModal" onclick="setDataInRentCarModal('@Model.VIN', '@httpContextAccessor?.HttpContext?.Session.GetString("UserEmail")')">
                     Rent
                 </button>
             </td>
@@ -44,7 +45,7 @@
 </tr>
 
 <script>
-    function setDataInModal(car) {
+    function setDataInUpdateCarModal(car) {
         $("#updateCarModal .modal-body #inputVIN").val(car.VIN);
         $("#updateCarModal .modal-body #inputManufacturer").val(car.Manufacturer);
         $("#updateCarModal .modal-body #inputModel").val(car.Model);
@@ -54,5 +55,10 @@
         $("#updateCarModal .modal-body #inputYearOfManufacture").val(car.YearOfManufacture);
         $("#updateCarModal .modal-body #inputRentalPrice").val(car.RentalPrice);
         $("#updateCarModal .modal-body #inputImageUrl").val(car.ImageUrl);
+    }
+
+    function setDataInRentCarModal(vin, userEmail) {
+        $("#rentCarModal .modal-body #inputEmail").val(userEmail);
+        $("#rentCarModal .modal-body #inputVIN").val(vin);
     }
 </script>

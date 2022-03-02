@@ -1,0 +1,45 @@
+﻿@using CaRental.Web.Database.Models
+@model Rental
+
+<div class="modal fade" id="rentCarModal" tabindex="-1" aria-labelledby="rentCarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rentCarModalLabel">Rent car</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="OnRentCarSubmit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="VIN" class="control-label">VIN:</label>
+                        <input id="inputVIN" asp-for="VIN" class="form-control" readonly />
+                        <span asp-validation-for="VIN" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label">Email:</label>
+                        <input id="inputEmail" asp-for="Email" class="form-control" readonly />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="From" class="control-label">From:</label>
+                            <input asp-for="From" class="form-control" />
+                            <span asp-validation-for="From" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="To" class="control-label">To:</label>
+                            <input asp-for="To" class="form-control" />
+                            <span asp-validation-for="To" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="text-align: center; margin-top: 10px;">
+                        <div class="modal-footer">
+                            <input type="submit" value="Rent car" class="btn btn-outline-primary"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

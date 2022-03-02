@@ -76,18 +76,23 @@ namespace CaRental.Web.Database.Data
         /// <exception cref="UserException"></exception>
         public IEnumerable<Car> GetAvailableCars()
         {
+            var cars = new List<Car>();
+
             using (var database = new CaRentalDBEntities())
             {
                 var currentDateTime = DateTime.Now;
                 var activeRentals = database.Rentals.Where(rentalDB => rentalDB.From < currentDateTime && rentalDB.To > currentDateTime);
 
                 var availableCars = database.Cars.Where(carDB => !activeRentals.Any(rental => rental.VIN.Equals(carDB.VIN)));
+                cars.AddRange(availableCars);
 
                 if (availableCars == null || !availableCars.Any())
                     throw new UserException($"No cars available");
 
-                return availableCars;
             }
+
+            return cars;
+
         }
 
         /// <summary>

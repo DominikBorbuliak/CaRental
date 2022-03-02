@@ -2,6 +2,7 @@
 using CaRental.Web.Database.Contracts;
 using CaRental.Web.Database.Models;
 using CaRental.Web.Extensions;
+using CaRental.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaRental.Web.Controllers
@@ -62,7 +63,7 @@ namespace CaRental.Web.Controllers
 
             // Redirect to main page after successfull person
             // TODO: fix sending informations
-            return RedirectToAction("List", "Car");
+            return RedirectToAction("List", "Car", new CarListViewModel());
         }
     }
 }

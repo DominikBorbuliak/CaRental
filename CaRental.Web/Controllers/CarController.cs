@@ -17,15 +17,17 @@ namespace CaRental.Web.Controllers
             _notificationService = notificationService;
         }
 
-        public IActionResult List()
+        [HttpGet]
+        public IActionResult List(CarListViewModel viewModel)
         {
             var isAdmin = bool.Parse(HttpContext.Session.GetString("IsAdmin") ?? "false");
 
-            var cars = _databaseService.GetAllCars();
-            var viewModel = new CarListViewModel
-            {
-                Cars = cars
-            };
+            viewModel.Cars = isAdmin ? _databaseService.GetAllCars() : _databaseService.GetAvailableCars();
+
+            if (viewModel.PriceFrom == null)
+                viewModel.PriceFrom = 0;
+            if (viewModel.PriceTo == null)
+                viewModel.PriceTo = viewModel.Cars?.Any() == true ? viewModel.Cars.Max(car => car.RentalPrice) : 0;
 
             return View(viewModel);
         }
@@ -74,6 +76,25 @@ namespace CaRental.Web.Controllers
             {
                 _databaseService.DeleteCar(car);
                 _notificationService.Success("Car was succesfully deleted.");
+            }
+            catch (UserException exception)
+            {
+                _notificationService.Error(exception.Message);
+            }
+            catch
+            {
+                _notificationService.Error("Unexpected error occured! Please contact administrator.");
+            }
+
+            return RedirectToAction("List");
+        }
+
+        public IActionResult OnRentCarSubmit(Rental rental)
+        {
+            try
+            {
+                _databaseService.AddRental(rental);
+                _notificationService.Success("Car was successfully rented.");
             }
             catch (UserException exception)
             {
