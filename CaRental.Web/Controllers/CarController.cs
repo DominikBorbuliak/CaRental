@@ -18,16 +18,25 @@ namespace CaRental.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult List(CarListViewModel viewModel)
+        public IActionResult List(CarListViewModel viewModel, bool resetFilters = false)
         {
-            var isAdmin = bool.Parse(HttpContext.Session.GetString("IsAdmin") ?? "false");
+            if (resetFilters)
+            {
+                viewModel.Filter.Manufacturer = null;
+                viewModel.Filter.Type = null;
+                viewModel.Filter.FuelType = null;
+                viewModel.Filter.ManufacturedFrom = 2000;
+                viewModel.Filter.ManufacturedTo = DateTime.Now.Year;
+                viewModel.Filter.PriceFrom = 0;
+                viewModel.Filter.PriceTo = 999.99;
 
-            viewModel.Cars = isAdmin ? _databaseService.GetAllCars() : _databaseService.GetAvailableCars();
-
-            if (viewModel.PriceFrom == null)
-                viewModel.PriceFrom = 0;
-            if (viewModel.PriceTo == null)
-                viewModel.PriceTo = viewModel.Cars?.Any() == true ? viewModel.Cars.Max(car => car.RentalPrice) : 0;
+                var currentDateTime = DateTime.Now;
+                var currentDateTimeFormatted = new DateTime(currentDateTime.Year, currentDateTime.Month, currentDateTime.Day, currentDateTime.Hour, currentDateTime.Minute, 0);
+                viewModel.Filter.RentFrom = currentDateTimeFormatted;
+                viewModel.Filter.RentTo = currentDateTimeFormatted;
+            }
+            
+            viewModel.Cars = _databaseService.GetCarsWithFilter(viewModel.Filter);
 
             return View(viewModel);
         }

@@ -1,5 +1,6 @@
 ﻿using CaRental.Web.Database.Contracts;
 using CaRental.Web.Database.Models;
+using CaRental.Web.Extensions;
 
 namespace CaRental.Web.Database.Data
 {
@@ -72,23 +73,42 @@ namespace CaRental.Web.Database.Data
         /// Returns all available cars
         /// If no cars available throw UserException
         /// </summary>
+        /// <param name="filter"></param>
         /// <returns></returns>
         /// <exception cref="UserException"></exception>
-        public IEnumerable<Car> GetAvailableCars()
+        public IEnumerable<Car> GetCarsWithFilter(CarFilter filter)
         {
             var cars = new List<Car>();
 
             using (var database = new CaRentalDBEntities())
             {
-                var currentDateTime = DateTime.Now;
-                var activeRentals = database.Rentals.Where(rentalDB => rentalDB.From < currentDateTime && rentalDB.To > currentDateTime);
+                var carsDB = database.Cars as IEnumerable<Car>;
 
-                var availableCars = database.Cars.Where(carDB => !activeRentals.Any(rental => rental.VIN.Equals(carDB.VIN)));
-                cars.AddRange(availableCars);
+                if (!string.IsNullOrEmpty(filter?.Manufacturer))
+                    carsDB = carsDB.Where(car => car.Manufacturer.Equals(filter.Manufacturer));
+                if (filter?.Type != null)
+                    carsDB = carsDB.Where(car => car.Type == filter.Type);
+                if (filter?.FuelType != null)
+                    carsDB = carsDB.Where(car => car.FuelType == filter.FuelType);
+                if (filter?.ManufacturedFrom != null)
+                    carsDB = carsDB.Where(car => car.YearOfManufacture >= filter.ManufacturedFrom);
+                if (filter?.ManufacturedTo != null)
+                    carsDB = carsDB.Where(car => car.YearOfManufacture <= filter.ManufacturedTo);
+                if (filter?.PriceFrom != null)
+                    carsDB = carsDB.Where(car => car.RentalPrice >= filter.PriceFrom);
+                if (filter?.PriceTo != null)
+                    carsDB = carsDB.Where(car => car.RentalPrice <= filter.PriceTo);
+                if (filter?.RentFrom != null && filter?.RentTo != null)
+                {
+                    var rentFrom = filter.RentFrom ?? DateTime.Now;
+                    var rentTo = filter.RentTo ?? DateTime.Now;
 
-                if (availableCars == null || !availableCars.Any())
-                    throw new UserException($"No cars available");
+                    var activeRentals = database.Rentals.ToList().Where(rentalDB => rentalDB.From.IsBetween(rentFrom, rentTo) || rentalDB.To.IsBetween(rentFrom, rentTo) || (rentalDB.From < rentFrom && rentalDB.To > rentTo)).Select(car => car.VIN).Distinct();
 
+                    carsDB = carsDB.Where(car => !activeRentals.Contains(car.VIN));
+                }
+
+                cars.AddRange(carsDB);
             }
 
             return cars;

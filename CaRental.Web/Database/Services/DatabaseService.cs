@@ -28,7 +28,7 @@ namespace CaRental.Web.Database.Services
 
         public IEnumerable<Car> GetAllCars() => _carRepository.GetAllCars();
 
-        public IEnumerable<Car> GetAvailableCars() => _carRepository.GetAvailableCars();
+        public IEnumerable<Car> GetCarsWithFilter(CarFilter filter) => _carRepository.GetCarsWithFilter(filter);
 
         public User GetUserByEmail(string userEmail) => _userRepository.GetUserByEmail(userEmail);
 

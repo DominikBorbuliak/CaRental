@@ -63,7 +63,7 @@ namespace CaRental.Web.Controllers
 
             // Redirect to main page after successfull person
             // TODO: fix sending informations
-            return RedirectToAction("List", "Car", new CarListViewModel());
+            return RedirectToAction("List", "Car", new { ViewModel = new CarListViewModel(), ResetFilters = true });
         }
     }
 }
