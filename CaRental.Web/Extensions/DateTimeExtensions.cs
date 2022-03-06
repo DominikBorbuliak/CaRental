@@ -4,7 +4,10 @@
     {
         public static bool IsBetween(this DateTime input, DateTime min, DateTime max)
         {
-            return input >= min && input <= max;
+            if (min < max)
+                return input >= min && input <= max;
+
+            return input >= max && input <= min;
         }
     }
 }
