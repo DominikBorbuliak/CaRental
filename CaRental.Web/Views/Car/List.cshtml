@@ -39,46 +39,46 @@
                     @using (Html.BeginForm("List", "Car", FormMethod.Get, new { onChange = "this.submit();" }))
                     {
                         <div class="row">
-                            <div class="col-md-1">
+                            <div class="col-xxl-1 col-xl-3 col-md-3 col-sm-4">
                                 <label class="control-label">Manufacturer:</label>
                                 @Html.DropDownListFor(car => car.Filter.Manufacturer, Model?.Cars?.Any() == true ? Model.Cars.DistinctBy(car => car.Manufacturer).Select(car => new SelectListItem {Value = car.Manufacturer, Text = car.Manufacturer, Selected = car.Manufacturer.Equals(Model.Filter.Manufacturer)}) : new List<SelectListItem>(), "All" ,new { @class = "form-select" })
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-xxl-1 col-xl-3 col-md-3 col-sm-4">
                                 <label class="control-label">Type:</label>
                                 @Html.DropDownListFor(car => car.Filter.Type, Model?.Cars?.Any() == true ? Model.Cars.DistinctBy(car => car.Type).Select(car => new SelectListItem {Value = car.Type.ToString(), Text = car.Type.ToString(), Selected = car.Type == Model.Filter.Type}) : new List<SelectListItem>(), "All", new { @class = "form-select" })
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-xxl-1 col-xl-2 col-md-2 col-sm-4">
                                 <label class="control-label">Fuel type:</label>
                                 @Html.DropDownListFor(car => car.Filter.FuelType, Model?.Cars?.Any() == true ? Model.Cars.DistinctBy(car => car.FuelType).Select(car => new SelectListItem {Value = car.FuelType.ToString(), Text = car.FuelType.ToString(), Selected = car.FuelType == Model.Filter.FuelType}) : new List<SelectListItem>(), "All", new { @class = "form-select" })
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-xxl-1 col-xl-2 col-md-2 col-sm-6">
                                 <label class="control-label">Manuf. from:</label>
                                 @Html.DropDownListFor(car => car.Filter.ManufacturedFrom, Enumerable.Range(2000, DateTime.Now.Year - 1999).Select(year => new SelectListItem{ Value = year.ToString(), Text = year.ToString(), Selected = Model != null && year == Model.Filter.ManufacturedFrom}), new { @class = "form-select"})
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-xxl-1 col-xl-2 col-md-2 col-sm-6">
                                 <label class="control-label">Manuf. to:</label>
                                 @Html.DropDownListFor(car => car.Filter.ManufacturedTo, Enumerable.Range(2000, DateTime.Now.Year - 1999).Select(year => new SelectListItem{ Value = year.ToString(), Text = year.ToString(), Selected = Model != null && year == Model.Filter.ManufacturedTo}), @DateTime.Now.Year.ToString(), new { @class = "form-select"})
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-xxl-1 col-xl-2 col-md-2 col-sm-6">
                                 <label class="control-label">Price from:</label>
                                 @Html.TextBoxFor(car => car.Filter.PriceFrom, new { @class = "form-control", type = "number", step = "0.25", min = "0"})
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-xxl-1 col-xl-2 col-md-2 col-sm-6">
                                 <label class="control-label">Price to:</label>
                                 @Html.TextBoxFor(car => car.Filter.PriceTo, new { @class = "form-control", type = "number", step = "0.25", min = "0"})
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-xxl-2 col-xl-4 col-md-4 col-sm-6">
                                 <label asp-for="Filter.RentFrom" class="control-label">From:</label>
                                 <input asp-for="Filter.RentFrom" class="form-control" />
                                 <span asp-validation-for="Filter.RentFrom" class="text-danger"></span>
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-xxl-2 col-xl-4 col-md-4 col-sm-6">
                                 <label asp-for="Filter.RentTo" class="control-label">To:</label>
                                 <input asp-for="Filter.RentTo" class="form-control" />
                                 <span asp-validation-for="Filter.RentTo" class="text-danger"></span>
                             </div>
-                            <div class="col-md-1">
-                                <button type="button" class="btn btn-primary" style="margin-top: 24px" onclick="window.location.href='@Url.Action("List", "Car", new { ResetFilters = true})'">
+                            <div class="form-group col-xxl-1 cold-xl-12">
+                                 <button type="button" class="btn btn-primary" style="margin-top: 24px; width: 100%" onclick="window.location.href='@Url.Action("List", "Car", new { ResetFilters = true})'">
                                     Reset filters
                                 </button>
                             </div>
@@ -98,28 +98,24 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">Image</th>
-                                <th scope="col">Manufacturer</th>
-                                <th scope="col">Model</th>
-                                <th scope="col">Type</th>
-                                <th scope="col">Fuel Type</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Year of manufacture</th>
-                                <th scope="col">Rental price</th>
-                                @{
-                                    if (bool.Parse(ViewData["IsAdmin"]?.ToString() ?? "false"))
-                                    {
-                                        <th scope="col">
-                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCarModal">
+                                <th style="width: 8%" scope="col">Image</th>
+                                <th style="width: 10%" scope="col">Manufacturer</th>
+                                <th style="width: 10%" scope="col">Model</th>
+                                <th style="width: 10%" scope="col">Type</th>
+                                <th style="width: 10%" scope="col">Fuel Type</th>
+                                <th style="width: 22%" scope="col">Description</th>
+                                <th style="width: 10%" scope="col">Year of manufacture</th>
+                                <th style="width: 10%" scope="col">Rental price</th>
+                                <th style="width: 10%" scope="col">
+                                    @{
+                                        if (bool.Parse(ViewData["IsAdmin"]?.ToString() ?? "false"))
+                                        {
+                                            <button style="width: 100%" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCarModal">
                                                 Add car
                                             </button>
-                                        </th>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <th scope="col"></th>
-                                    }
-                                }
+                                </th>
                             </tr>
                         </thead>
                         @{
