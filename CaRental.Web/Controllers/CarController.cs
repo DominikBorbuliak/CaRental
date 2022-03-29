@@ -38,6 +38,9 @@ namespace CaRental.Web.Controllers
             
             viewModel.Cars = _databaseService.GetCarsWithFilter(viewModel.Filter);
 
+            ViewData["RentCarFrom"] = (viewModel.Filter.RentFrom ?? DateTime.Now).ToString("yyyy-MM-ddTHH:mm");
+            ViewData["RentCarTo"] = (viewModel.Filter.RentTo ?? DateTime.Now).ToString("yyyy-MM-ddTHH:mm");
+
             return View(viewModel);
         }
 
@@ -98,11 +101,19 @@ namespace CaRental.Web.Controllers
             return RedirectToAction("List");
         }
 
-        public IActionResult OnRentCarSubmit(Rental rental)
+        public IActionResult OnRentCarSubmit(RentalViewModel rental)
         {
             try
             {
-                _databaseService.AddRental(rental);
+                _databaseService.AddRental(new Rental
+                {
+                    VIN = rental.VIN,
+                    Email = rental.Email,
+                    From = rental.From,
+                    To = rental.To,
+                    Price = double.Parse(rental.TotalPrice.Split(" ")[0])
+                });
+
                 _notificationService.Success("Car was successfully rented.");
             }
             catch (UserException exception)

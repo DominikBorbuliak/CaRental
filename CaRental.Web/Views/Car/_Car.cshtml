@@ -22,7 +22,7 @@
         @Html.Raw(Model.Description)
     </td>
     <td style="width: 8%">@Model.YearOfManufacture</td>
-    <td style="width: 8%">@($"{Model.RentalPrice.ToString("0.00")} €")</td>
+    <td style="width: 8%">@($"{Model.RentalPrice.ToString("0.00")} €/hr")</td>
     <td style="width: 8%">
         @{
             if (bool.Parse(ViewData["IsAdmin"]?.ToString() ?? "false"))
@@ -36,7 +36,7 @@
             }
             else
             {
-                <button style="width: 100%" type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#rentCarModal" onclick="setDataInRentCarModal('@Model.VIN', '@httpContextAccessor?.HttpContext?.Session.GetString("UserEmail")')">
+                <button style="width: 100%" type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#rentCarModal" onclick="setDataInRentCarModal(@JsonSerializer.Serialize(Model))">
                     Rent
                 </button>
             }
@@ -57,8 +57,18 @@
         $("#updateCarModal .modal-body #inputImageUrl").val(car.ImageUrl);
     }
 
-    function setDataInRentCarModal(vin, userEmail) {
+    function setDataInRentCarModal(car) {
+        let userEmail = '@httpContextAccessor?.HttpContext?.Session.GetString("UserEmail")';
         $("#rentCarModal .modal-body #inputEmail").val(userEmail);
-        $("#rentCarModal .modal-body #inputVIN").val(vin);
+
+        $("#rentCarModal .modal-body #inputVIN").val(car.VIN);
+
+        let rentalFrom = new Date('@ViewData["RentCarFrom"]');
+        let rentalTo = new Date('@ViewData["RentCarTo"]');
+        let rentalLengthHours = (rentalTo - rentalFrom) / 1000 / 60 / 60;
+        let rentalTotalPrice = Math.ceil(rentalLengthHours) * car.RentalPrice;
+        $("#rentCarModal .modal-body #inputTotalPrice").val(rentalTotalPrice + " €");
+
+        $("#rentCarModal .modal-body #inputPricePerHour").val(car.RentalPrice + " €");
     }
 </script>

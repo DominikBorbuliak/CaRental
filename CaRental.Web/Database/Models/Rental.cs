@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CaRental.Web.Database.Models
 {
@@ -15,6 +16,13 @@ namespace CaRental.Web.Database.Models
         /// Rental ends at day and time
         /// </summary>
         public DateTime To { get; set; }
+
+        /// <summary>
+        /// Price for rent
+        /// </summary>
+        [Column(TypeName = "DOUBLE(6, 2)")]
+        [Range(0.01, 999999.99)]
+        public double Price { get; set; }
 
         /// <summary>
         /// PrimaryKey, ForeignKey
