@@ -26,7 +26,7 @@
 
 @await Html.PartialAsync("_addCar", new Car())
 @await Html.PartialAsync("_updateCar", new Car())
-@await Html.PartialAsync("_rentCar", new RentalViewModel())
+@await Html.PartialAsync("_rentCar", new RentalViewModel{})
 
 <div>
     <div class="row" style="margin-bottom: 20px;">
@@ -69,13 +69,20 @@
                             </div>
                             <div class="form-group col-xxl-2 col-xl-4 col-md-4 col-sm-6">
                                 <label asp-for="Filter.RentFrom" class="control-label">From:</label>
-                                <input asp-for="Filter.RentFrom" class="form-control" />
-                                <span asp-validation-for="Filter.RentFrom" class="text-danger"></span>
+                                <input
+                                    asp-for="Filter.RentFrom"
+                                    class="form-control"
+                                    min="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")"
+                                    max="@((Model?.Filter?.RentTo ?? DateTime.Now).ToString("yyyy-MM-ddThh:mm"))"
+                                />
                             </div>
                             <div class="form-group col-xxl-2 col-xl-4 col-md-4 col-sm-6">
                                 <label asp-for="Filter.RentTo" class="control-label">To:</label>
-                                <input asp-for="Filter.RentTo" class="form-control" />
-                                <span asp-validation-for="Filter.RentTo" class="text-danger"></span>
+                                <input
+                                    asp-for="Filter.RentTo"
+                                    class="form-control"
+                                    min="@((Model?.Filter?.RentFrom ?? DateTime.Now.AddHours(1)).ToString("yyyy-MM-ddThh:mm"))"
+                                />
                             </div>
                             <div class="form-group col-xxl-1 cold-xl-12">
                                  <button type="button" class="btn btn-primary" style="margin-top: 24px; width: 100%" onclick="window.location.href='@Url.Action("List", "Car", new { ResetFilters = true})'">

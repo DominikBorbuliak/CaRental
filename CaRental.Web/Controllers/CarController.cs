@@ -33,13 +33,21 @@ namespace CaRental.Web.Controllers
                 var currentDateTime = DateTime.Now;
                 var currentDateTimeFormatted = new DateTime(currentDateTime.Year, currentDateTime.Month, currentDateTime.Day, currentDateTime.Hour, currentDateTime.Minute, 0);
                 viewModel.Filter.RentFrom = currentDateTimeFormatted;
-                viewModel.Filter.RentTo = currentDateTimeFormatted;
+                viewModel.Filter.RentTo = currentDateTimeFormatted.AddHours(1);
             }
-            
+
+            if (viewModel.Filter.RentFrom > viewModel.Filter.RentTo)
+            {
+                _notificationService.Error("Rent from can not be greater than rent to!");
+
+                viewModel.Cars = new List<Car>();
+                return View(viewModel);
+            }
+                
             viewModel.Cars = _databaseService.GetCarsWithFilter(viewModel.Filter);
 
             ViewData["RentCarFrom"] = (viewModel.Filter.RentFrom ?? DateTime.Now).ToString("yyyy-MM-ddTHH:mm");
-            ViewData["RentCarTo"] = (viewModel.Filter.RentTo ?? DateTime.Now).ToString("yyyy-MM-ddTHH:mm");
+            ViewData["RentCarTo"] = (viewModel.Filter.RentTo ?? DateTime.Now.AddHours(1)).ToString("yyyy-MM-ddTHH:mm");
 
             return View(viewModel);
         }
@@ -125,7 +133,7 @@ namespace CaRental.Web.Controllers
                 _notificationService.Error("Unexpected error occured! Please contact administrator.");
             }
 
-            return RedirectToAction("List");
+            return RedirectToAction("List", new { viewModel = new CarListViewModel(), resetFilters = true });
         }
 
         public IActionResult Logout()
