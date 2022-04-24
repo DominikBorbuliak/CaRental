@@ -9,12 +9,16 @@ namespace CaRental.Web.Database.Models
         /// PrimaryKey
         /// Rental starts at day and time
         /// </summary>
+        [Column(TypeName = "DATETIME")]
+        [DataType(DataType.DateTime)]
         public DateTime From { get; set; }
 
         /// <summary>
         /// PrimaryKey
         /// Rental ends at day and time
         /// </summary>
+        [Column(TypeName = "DATETIME")]
+        [DataType(DataType.DateTime)]
         public DateTime To { get; set; }
 
         /// <summary>

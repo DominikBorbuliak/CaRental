@@ -3,6 +3,7 @@ using System;
 using CaRental.Web.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CaRental.Web.Migrations
 {
     [DbContext(typeof(CaRentalDBEntities))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220424185607_FromToRentalsTypeChanged")]
+    partial class FromToRentalsTypeChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
