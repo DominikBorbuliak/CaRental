@@ -13,8 +13,10 @@ namespace CaRental.Web.Extensions.Tests
         [DataRow("<>1231./,.;'/.,", "289f085768cc41a530e3df67a5dd2f89f525042899ba39442f177cd03d7581f4")]
         public void ConvertToSha256HashTest(string input, string expected)
         {
-            var actual = input.ConvertToSha256Hash();
-            Assert.AreEqual(expected, actual);
+            var actual1 = input.ConvertToSha256Hash();
+            var actual2 = input.ConvertToSha256Hash();
+            Assert.AreEqual(expected, actual1);
+            Assert.AreEqual(actual1, actual2);
         }
     }
 }
