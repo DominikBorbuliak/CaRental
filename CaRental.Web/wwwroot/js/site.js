@@ -1,4 +1,9 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function formatDateTimeForInput(date) {
+    let years = date.getFullYear();
+    let months = ("0" + (date.getMonth() + 1)).slice(-2);
+    let days = ("0" + date.getDate()).slice(-2);
+    let hours = ("0" + date.getHours()).slice(-2);
+    let minutes = ("0" + date.getMinutes()).slice(-2);
 
-// Write your JavaScript code.
+    return `${years}-${months}-${days}T${hours}:${minutes}`;
+}

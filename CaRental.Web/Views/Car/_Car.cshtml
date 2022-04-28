@@ -11,37 +11,37 @@
 }
 
 <tr>
-    <td>
+    <td style="width: 8%">
         <img src="@Model.ImageUrl" width="100px" height="50px"/>
     </td>
-    <td>@Model.Manufacturer</td>
-    <td>@Model.Model</td>
-    <td>@Model.Type.ToString()</td>
-    <td>@Model.FuelType.ToString()</td>
-    <td>@Model.Description</td>
-    <td>@Model.YearOfManufacture</td>
-    <td>@($"{Model.RentalPrice.ToString("0.00")} €")</td>
-    @{
-        if (bool.Parse(ViewData["IsAdmin"]?.ToString() ?? "false"))
-        {
-            <td>
-                <button type="button" class="btn btn-outline-danger" onclick="window.location.href='@Url.Action("OnDeleteCarClick", "Car", @Model)'">
+    <td style="width: 10%">@Model.Manufacturer</td>
+    <td style="width: 10%">@Model.Model</td> 
+    <td style="width: 10%">@Model.Type.ToString()</td>
+    <td style="width: 10%">@Model.FuelType.ToString()</td>
+    <td style="width: 22%">
+        @Html.Raw(Model.Description)
+    </td>
+    <td style="width: 8%">@Model.YearOfManufacture</td>
+    <td style="width: 8%">@($"{Model.RentalPrice.ToString("0.00")} €/hr")</td>
+    <td style="width: 8%">
+        @{
+            if (bool.Parse(ViewData["IsAdmin"]?.ToString() ?? "false"))
+            {
+                <button style="width: 100%" type="button" class="btn btn-outline-danger" onclick="window.location.href='@Url.Action("OnDeleteCarClick", "Car", @Model)'">
                     Remove
                 </button>
-                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCarModal" onclick="setDataInUpdateCarModal(@JsonSerializer.Serialize(Model))">
+                <button style="width: 100%" type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCarModal" onclick="setDataInUpdateCarModal(@JsonSerializer.Serialize(Model))">
                     Update
                 </button>
-            </td>
-        }
-        else
-        {
-            <td>
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#rentCarModal" onclick="setDataInRentCarModal('@Model.VIN', '@httpContextAccessor?.HttpContext?.Session.GetString("UserEmail")')">
+            }
+            else
+            {
+                <button style="width: 100%" type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#rentCarModal" onclick="setDataInRentCarModal(@JsonSerializer.Serialize(Model))">
                     Rent
                 </button>
-            </td>
+            }
         }
-    }
+    </td>
 </tr>
 
 <script>
@@ -57,8 +57,18 @@
         $("#updateCarModal .modal-body #inputImageUrl").val(car.ImageUrl);
     }
 
-    function setDataInRentCarModal(vin, userEmail) {
+    function setDataInRentCarModal(car) {
+        let userEmail = '@httpContextAccessor?.HttpContext?.Session.GetString("UserEmail")';
         $("#rentCarModal .modal-body #inputEmail").val(userEmail);
-        $("#rentCarModal .modal-body #inputVIN").val(vin);
+
+        $("#rentCarModal .modal-body #inputVIN").val(car.VIN);
+
+        let rentalFrom = new Date('@ViewData["RentCarFrom"]');
+        let rentalTo = new Date('@ViewData["RentCarTo"]');
+        let rentalLengthHours = (rentalTo - rentalFrom) / 1000 / 60 / 60;
+        let rentalTotalPrice = Math.ceil(rentalLengthHours) * car.RentalPrice;
+        $("#rentCarModal .modal-body #inputTotalPrice").val(rentalTotalPrice + " €");
+
+        $("#rentCarModal .modal-body #inputPricePerHour").val(car.RentalPrice + " €");
     }
 </script>

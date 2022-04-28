@@ -1,5 +1,5 @@
 ﻿@using CaRental.Web.Database.Models
-@model Rental
+@model RentalViewModel
 
 <div class="modal fade" id="rentCarModal" tabindex="-1" aria-labelledby="rentCarModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -24,15 +24,41 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label asp-for="From" class="control-label">From:</label>
-                            <input asp-for="From" class="form-control" />
+                            <input
+                                asp-for="From" class="form-control"
+                                value="@ViewData["RentCarFrom"]"
+                                min="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")"
+                                max="@(ViewData["RentCarTo"] ?? DateTime.Now.ToString("yyyy-MM-ddThh:mm"))"
+                                id="inputFrom"
+                                onchange="onDateTimeFromChange()"
+                            />
                             <span asp-validation-for="From" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label asp-for="To" class="control-label">To:</label>
-                            <input asp-for="To" class="form-control" />
+                            <input
+                                asp-for="To"
+                                value="@ViewData["RentCarTo"]"
+                                min="@(ViewData["RentCarFrom"] ?? DateTime.Now.AddHours(1).ToString("yyyy-MM-ddThh:mm"))"
+                                id="inputTo"                                                               
+                                class="form-control"
+                                onchange="onDateTimeToChange()"
+                            />
                             <span asp-validation-for="To" class="text-danger"></span>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="PricePerHour" class="control-label">Price per hour:</label>
+                            <input id="inputPricePerHour" asp-for="PricePerHour" class="form-control" readonly />
+                            <span asp-validation-for="PricePerHour" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="TotalPrice" class="control-label">Total price:</label>
+                            <input id="inputTotalPrice" asp-for="TotalPrice" class="form-control" readonly />
+                            <span asp-validation-for="TotalPrice" class="text-danger"></span>
+                        </div>
+                    </div>      
                     <div class="form-group" style="text-align: center; margin-top: 10px;">
                         <div class="modal-footer">
                             <input type="submit" value="Rent car" class="btn btn-outline-primary"/>
@@ -43,3 +69,42 @@
         </div>
     </div>
 </div>
+
+<script>
+    function onDateTimeFromChange() {
+        let rentalFrom = new Date(document.getElementById("inputFrom").value);
+        let rentalFromFormatted = formatDateTimeForInput(rentalFrom);
+
+        document.getElementById("inputTo").min = rentalFromFormatted;
+
+        document.getElementById("inputTo").$validate();
+
+        recalculateRentalPrice();
+    }
+
+    function onDateTimeToChange() {
+        let rentalTo = new Date(document.getElementById("inputTo").value);
+        let rentalToFormatted = formatDateTimeForInput(rentalTo);
+
+        document.getElementById("inputFrom").max = rentalToFormatted;
+
+        recalculateRentalPrice();
+    }
+
+    function recalculateRentalPrice() {
+        let rentalFrom = new Date(document.getElementById("inputFrom").value);
+        let rentalTo = new Date(document.getElementById("inputTo").value);
+
+        if (rentalFrom > rentalTo) {
+            document.getElementById("inputTotalPrice").value = "Invalid time period";
+            return;
+        }
+
+        // calculate price
+        let rentalLengthHours = (rentalTo - rentalFrom) / 1000 / 60 / 60;
+        let pricePerHour = parseFloat(document.getElementById("inputPricePerHour").value.split(" ")[0]);
+        let rentalTotalPrice = Math.ceil(rentalLengthHours) * pricePerHour;
+
+        document.getElementById("inputTotalPrice").value = rentalTotalPrice + " €";
+    }
+</script>

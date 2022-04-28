@@ -2,9 +2,9 @@
 
 namespace CaRental.Web.Database.Contracts
 {
-    public interface IUserRepository
-    {
-        User GetUserByEmail(string userEmail);
-        void AddUser(User user);
-    }
+	public interface IUserRepository
+	{
+		User GetUserByEmail(string userEmail);
+		void AddUser(User user);
+	}
 }
