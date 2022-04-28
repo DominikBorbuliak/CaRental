@@ -2,8 +2,8 @@
 
 namespace CaRental.Web.Database.Contracts
 {
-    public interface IRentalRepository
-    {
-        void AddRental(Rental rental);
-    }
+	public interface IRentalRepository
+	{
+		void AddRental(Rental rental);
+	}
 }
